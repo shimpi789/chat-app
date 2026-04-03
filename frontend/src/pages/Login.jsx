@@ -18,21 +18,29 @@ function Login() {
             e.preventDefault()
             setLoading(true)
             try {
-                let result =await axios.post(`${serverUrl}/api/auth/login`,{
-    email,password
-                },{withCredentials:true})
-               dispatch(setUserData(result.data))
-               dispatch(setSelectedUser(null))
-               navigate("/")
-                setEmail("")
-                setPassword("")
-                setLoading(false)
-                setErr("")
-            } catch (error) {
-                console.log(error)
-                setLoading(false)
-                setErr(error.response.data.message)
-            }
+                let result = await axios.post(`${serverUrl}/api/auth/login`, {
+                  email,
+                  password
+                }, { withCredentials: true });
+              
+                console.log("LOGIN RESPONSE:", result.data);
+              
+                dispatch(setUserData(result.data.user));   
+                dispatch(setSelectedUser(null));
+              
+                localStorage.setItem("token", result.data.token); 
+              
+                navigate("/");
+                setEmail("");
+                setPassword("");
+                setLoading(false);
+                setErr("");
+              
+              } catch (error) {
+                console.log("ERROR:", error.response?.data || error.message);
+                setLoading(false);
+                setErr(error.response?.data?.message);
+              }
         }
     
   return (
