@@ -26,26 +26,44 @@ const handleImage=(e)=>{
   setBackendImage(file)
   setFrontendImage(URL.createObjectURL(file))
     }
-const handleSendMessage=async (e)=>{
-  e.preventDefault()
-  if(input.length==0 && backendImage==null){
-    return 
-  }
-  try {
-    let formData=new FormData()
-    formData.append("message",input)
-    if(backendImage){
-      formData.append("image",backendImage)
-    }
-    let result=await axios.post(`${serverUrl}/api/message/send/${selectedUser._id}`,formData,{withCredentials:true})
-    dispatch(setMessages([...messages,result.data]))
-    setInput("")
-    setFrontendImage(null)
-    setBackendImage(null)
-  } catch (error) {
-    console.log(error)
-  }
-}
+    const handleSendMessage = async (e) => {
+      e.preventDefault();
+    
+      if (input.length === 0 && backendImage == null) return;
+    
+      try {
+        const token = localStorage.getItem("token");
+    
+        if (!token || !selectedUser?._id) return;
+    
+        let formData = new FormData();
+        formData.append("message", input);
+    
+        if (backendImage) {
+          formData.append("image", backendImage);
+        }
+    
+        let result = await axios.post(
+          `${serverUrl}/api/message/send/${selectedUser._id}`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data"
+            }
+          }
+        );
+    
+        dispatch(setMessages([...messages, result.data]));
+    
+        setInput("");
+        setFrontendImage(null);
+        setBackendImage(null);
+    
+      } catch (error) {
+        console.log("SEND ERROR:", error.response?.data || error.message);
+      }
+    };
   const onEmojiClick =(emojiData)=>{
  setInput(prevInput=>prevInput+emojiData.emoji)
  setShowPicker(false)
