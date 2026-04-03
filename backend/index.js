@@ -13,9 +13,9 @@ const port=process.env.PORT || 4000
 
 
 app.use(cors({
-    origin:"http://localhost:5173",
-    credentials:true
-}))
+    origin: "https://chat-app-ten-rho-17.vercel.app",
+    credentials: true
+  }));
 app.use(express.json())
 app.use(cookieParser())
 app.get("/", (req, res) => {
