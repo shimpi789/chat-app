@@ -6,6 +6,12 @@ This project demonstrates real-world full-stack development including authentica
 
 ---
 
+
+## 🌐 Live Links
+
+- 🔗 Frontend: https://chat-app-ten-rho-17.vercel.app/
+- ⚙️ Backend: https://chat-app-37ie.onrender.com 
+- 📂 GitHub Repo: https://github.com/shimpi789/chat-app  
 ## 🚀 Features
 
 * 🔐 User Authentication (JWT-based)
