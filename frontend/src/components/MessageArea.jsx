@@ -11,7 +11,7 @@ import SenderMessage from './SenderMessage';
 import ReceiverMessage from './ReceiverMessage';
 import axios from 'axios';
 import { serverUrl } from '../main';
-import { setMessages } from '../redux/messageSlice';
+import { addMessage } from '../redux/messageSlice';
 function MessageArea() {
   let {selectedUser,userData,socket}=useSelector(state=>state.user)
   let dispatch=useDispatch()
@@ -54,7 +54,7 @@ const handleImage=(e)=>{
           }
         );
     
-        dispatch(setMessages([...messages, result.data]));
+        dispatch(addMessage(result.data));
     
         setInput("");
         setFrontendImage(null);
@@ -68,12 +68,28 @@ const handleImage=(e)=>{
  setInput(prevInput=>prevInput+emojiData.emoji)
  setShowPicker(false)
   }
-useEffect(()=>{
-socket?.on("newMessage",(mess)=>{
-  dispatch(setMessages([...messages,mess]))
-})
-return ()=>socket?.off("newMessage")
-},[messages,setMessages])
+useEffect(() => {
+  if (!socket || !selectedUser?._id || !userData?._id) return;
+
+  const handleNewMessage = (message) => {
+    const senderId = String(message.sender?._id || message.sender);
+    const receiverId = String(message.receiver?._id || message.receiver);
+    const currentUserId = String(userData._id);
+    const selectedUserId = String(selectedUser._id);
+
+    // Only append messages belonging to the conversation currently open.
+    const belongsToCurrentConversation =
+      (senderId === currentUserId && receiverId === selectedUserId) ||
+      (senderId === selectedUserId && receiverId === currentUserId);
+
+    if (belongsToCurrentConversation) {
+      dispatch(addMessage(message));
+    }
+  };
+
+  socket.on("newMessage", handleNewMessage);
+  return () => socket.off("newMessage", handleNewMessage);
+}, [socket, selectedUser?._id, userData?._id, dispatch]);
  
   return (
     <div className={`lg:w-[70%] relative   ${selectedUser?"flex":"hidden"} lg:flex  w-full h-full bg-slate-200 border-l-2 border-gray-300 overflow-hidden`}>

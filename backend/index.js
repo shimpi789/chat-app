@@ -12,10 +12,19 @@ import { app, server } from "./socket/socket.js"
 const port=process.env.PORT || 4000
 
 
+
+const allowedOrigins = [
+  "https://chat-app-ten-rho-17.vercel.app",
+  "http://localhost:5173"
+];
+
 app.use(cors({
-    origin: "https://chat-app-ten-rho-17.vercel.app",
-    credentials: true
-  }));
+  origin: allowedOrigins,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
 app.use(express.json())
 app.use(cookieParser())
 app.get("/", (req, res) => {
