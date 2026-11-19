@@ -55,7 +55,10 @@ function Profile() {
 
       console.log("PROFILE UPDATED:", result.data);
 
-      dispatch(setUserData(result.data)); // backend returns user directly
+      dispatch(setUserData({
+        ...userData,
+        ...result.data
+      })); // backend returns user directly
       navigate("/");
     } catch (error) {
       console.log("PROFILE ERROR:", error.response?.data || error.message);

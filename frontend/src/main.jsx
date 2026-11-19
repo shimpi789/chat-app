@@ -8,6 +8,7 @@ import { store } from './redux/store.js'
 
 export const serverUrl="https://chat-app-37ie.onrender.com"
 
+
 createRoot(document.getElementById('root')).render(
 <BrowserRouter>
 <Provider store={store}>

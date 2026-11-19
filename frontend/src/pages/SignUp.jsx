@@ -22,8 +22,11 @@ let dispatch=useDispatch()
             let result =await axios.post(`${serverUrl}/api/auth/signup`,{
 userName,email,password
             },{withCredentials:true})
-           dispatch(setUserData(result.data))
-           navigate("/profile")
+            dispatch(setUserData(result.data.user));
+
+            localStorage.setItem("token", result.data.token);
+            
+            navigate("/profile");
             setEmail("")
             setPassword("")
             setLoading(false)

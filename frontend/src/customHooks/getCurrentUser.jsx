@@ -12,7 +12,10 @@ const useGetCurrentUser = () => {
       try {
         const token = localStorage.getItem("token"); // ✅
 
-        if (!token) return; // safety
+        if (!token) {
+          dispatch(setUserData(null));
+          return;
+        }// safety
 
         const result = await axios.get(
           `${serverUrl}/api/user/current`,
