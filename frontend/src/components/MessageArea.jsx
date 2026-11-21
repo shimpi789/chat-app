@@ -15,6 +15,7 @@ import { addMessage } from '../redux/messageSlice';
 function MessageArea() {
   let {selectedUser,userData,socket}=useSelector(state=>state.user)
   let dispatch=useDispatch()
+  console.log("SELECTED USER:", selectedUser);
   let [showPicker,setShowPicker]=useState(false)
 let [input,setInput]=useState("")
 let [frontendImage,setFrontendImage]=useState(null)
@@ -103,15 +104,19 @@ useEffect(() => {
          <div className='w-[50px] h-[50px] rounded-full overflow-hidden flex justify-center items-center bg-white cursor-pointer shadow-gray-500 shadow-lg' >
         <img src={ selectedUser?.image || dp} alt="" className='h-[100%]'/>
         </div>
-        <h1 className='text-white font-semibold text-[20px]'>{selectedUser?.name || "user"}</h1>
+        <h1 className='text-white font-semibold text-[20px]'>
+  {selectedUser?.name || selectedUser?.userName || "user"}
+</h1>
     </div>
 
-    <div className='w-full h-[70%] flex flex-col py-[30px]  px-[20px] overflow-auto gap-[20px] '>
+    <div className='w-full h-[70%] flex flex-col py-[30px] px-[20px] overflow-auto gap-[20px] border-0 outline-none focus:outline-none'>
 
 {showPicker && <div className='absolute bottom-[120px] left-[20px]'><EmojiPicker width={250} height={350} className='shadow-lg z-[100]' onEmojiClick={onEmojiClick}/></div> }
 
-{messages && messages.map((mess)=>(
-  mess.sender==userData._id?<SenderMessage image={mess.image} message={mess.message}/>:<ReceiverMessage image={mess.image} message={mess.message}/>
+{messages && messages.map((mess) => (
+  mess.sender == userData._id
+    ? <SenderMessage key={mess._id} image={mess.image} message={mess.message}/>
+    : <ReceiverMessage key={mess._id} image={mess.image} message={mess.message}/>
 ))}
  
 

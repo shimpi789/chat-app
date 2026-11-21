@@ -23,6 +23,9 @@ function SideBar() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  useEffect(() => {
+    console.log("UPDATED SIDEBAR USERS:", otherUsers);
+  }, [otherUsers]);
 
   // 🔥 COMMON TOKEN
   const token = localStorage.getItem("token");
@@ -121,7 +124,7 @@ function SideBar() {
 
         <div className="w-full flex justify-between items-center">
           <h1 className="text-gray-800 font-bold text-[25px]">
-            Hii , {userData?.name || "user"}
+          Hii , {userData?.userName || "user"}
           </h1>
 
           <div
@@ -182,7 +185,7 @@ function SideBar() {
       </div>
 
       {/* ALL USERS */}
-      <div className="w-full h-[50%] overflow-auto flex flex-col gap-[20px] items-center mt-[20px]">
+      <div className="w-full h-[50%] overflow-auto flex flex-col gap-[20px] items-center mt-[20px] outline-none">
         {otherUsers?.map((user) => (
           <div
             key={user._id}
